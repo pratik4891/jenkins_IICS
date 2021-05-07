@@ -1,0 +1,136 @@
+pipeline {
+  agent any
+  stages {
+    
+     stage('clearing out old workspace'){
+      steps{
+        deleteDir()
+      }
+    }
+    //Print Params
+    stage('Current Directory') {
+        steps {
+          echo pwd
+        }
+    }
+    
+    stage('Git Checkout setup') {
+      steps {
+        
+            git branch: "main",
+                credentialsId: 'git',
+                url: 'https://github.com/ipsgit2018/testing.git'
+        
+      }
+    }
+    
+     stage('Create Source artifactory') 
+    {
+    
+      steps {
+        
+        
+         withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'ansible_ssh_id', keyFileVariable: 'ANSIBLE_KEY', passphraseVariable: '', usernameVariable: 'ANSIBLE_USER')])
+         {
+                 sh """#!/bin/bash
+            
+              export ANSIBLE_HOST_KEY_CHECKING=False
+              pwd
+              cd $WORKSPACE
+              #ansible-playbook -vv   copy_source.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY
+              #ansible-playbook -vv   replace.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY --extra-vars  Application_Name=$Application_Name --extra-vars Source_Environment=$Source_Environment --extra-vars FilePath_Name=$Export_File_Name --extra-vars Control_File=$Control_File --extra-vars Target_Environment=$Target_Environment --extra-vars Project_Name=$Project_Name
+              """
+            }
+          }
+         }
+     
+        stage('Create informatica exports') 
+    {
+    
+      steps {
+        
+        
+         withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'ansible_ssh_id', keyFileVariable: 'ANSIBLE_KEY', passphraseVariable: '', usernameVariable: 'ANSIBLE_USER')])
+         {
+                 sh """#!/bin/bash
+            
+              export ANSIBLE_HOST_KEY_CHECKING=False
+              pwd
+              cd $WORKSPACE
+              #ansible-playbook -vv /tmp/jenkins/export_control.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY
+              """
+            }
+          }
+         }
+         
+        stage('Create informatica imports') 
+    {
+    
+      steps {
+        
+        
+         withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'ansible_ssh_id', keyFileVariable: 'ANSIBLE_KEY', passphraseVariable: '', usernameVariable: 'ANSIBLE_USER')])
+         {
+                 sh """#!/bin/bash
+            
+              export ANSIBLE_HOST_KEY_CHECKING=False
+              
+              #ansible-playbook -vv /tmp/jenkins/replace_import.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY --extra-vars Application_Name=$Application_Name --extra-vars Source_Environment=$Source_Environment --extra-vars FilePath_Name=$Export_File_Name --extra-vars Control_File=$Import_Control_File --extra-vars Target_Environment=$Target_Environment
+              #ansible-playbook -vv /tmp/jenkins/import_infa.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY
+              """
+            }
+          }
+         }
+         
+    stage('Unit Testing') 
+    {
+    
+      steps {
+        
+        
+         withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'ansible_ssh_id', keyFileVariable: 'ANSIBLE_KEY', passphraseVariable: '', usernameVariable: 'ANSIBLE_USER')])
+         {
+                 sh """#!/bin/bash
+            
+              export ANSIBLE_HOST_KEY_CHECKING=False
+              
+              #ansible-playbook -vv /tmp/jenkins/replace_import.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY --extra-vars Application_Name=$Application_Name --extra-vars Source_Environment=$Source_Environment --extra-vars FilePath_Name=$Export_File_Name --extra-vars Control_File=$Import_Control_File --extra-vars Target_Environment=$Target_Environment
+              #ansible-playbook -vv /tmp/jenkins/import_infa.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY
+              """
+            }
+          }
+         }
+         
+     stage('Deploy to Environment??') 
+    {
+    
+      steps {
+        
+         input("Deploy to Prod ?")
+		 
+          }
+         }
+	
+	
+         
+        stage('Deploy to Integration service') 
+    {
+    
+      steps {
+        
+        
+         withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'ansible_ssh_id', keyFileVariable: 'ANSIBLE_KEY', passphraseVariable: '', usernameVariable: 'ANSIBLE_USER')])
+         {
+                 sh """#!/bin/bash
+            
+              export ANSIBLE_HOST_KEY_CHECKING=False
+              
+              #ansible-playbook -vv /tmp/jenkins/replace_application.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY --extra-vars Application_Name=$Application_Name --extra-vars Project_Name=$Project_Name --extra-vars Integration_Service=$Integration_Service --extra-vars Target_Environment=$Target_Environment
+              #ansible-playbook -vv /tmp/jenkins/create_war_app.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY
+              """
+            }
+          }
+         }
+         
+  }
+}

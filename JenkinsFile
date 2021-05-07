@@ -37,14 +37,14 @@ pipeline {
               export ANSIBLE_HOST_KEY_CHECKING=False
               pwd
               cd $WORKSPACE
-              #ansible-playbook -vv   copy_source.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY
-              #ansible-playbook -vv   replace.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY --extra-vars  Application_Name=$Application_Name --extra-vars Source_Environment=$Source_Environment --extra-vars FilePath_Name=$Export_File_Name --extra-vars Control_File=$Control_File --extra-vars Target_Environment=$Target_Environment --extra-vars Project_Name=$Project_Name
+              #ansible-playbook -vv   copy_source.yaml --extra-vars ansible_user=pratik --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY
+              #ansible-playbook -vv   replace.yaml --extra-vars ansible_user=pratik --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY --extra-vars  Application_Name=$Application_Name --extra-vars Source_Environment=$Source_Environment --extra-vars FilePath_Name=$Export_File_Name --extra-vars Control_File=$Control_File --extra-vars Target_Environment=$Target_Environment --extra-vars Project_Name=$Project_Name
               """
             }
           }
          }
      
-        stage('Create informatica exports') 
+        stage('Create pratik exports') 
     {
     
       steps {
@@ -57,13 +57,13 @@ pipeline {
               export ANSIBLE_HOST_KEY_CHECKING=False
               pwd
               cd $WORKSPACE
-              #ansible-playbook -vv /tmp/jenkins/export_control.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY
+              #ansible-playbook -vv /tmp/jenkins/export_control.yaml --extra-vars ansible_user=pratik --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY
               """
             }
           }
          }
          
-        stage('Create informatica imports') 
+        stage('Create pratik imports') 
     {
     
       steps {
@@ -75,8 +75,8 @@ pipeline {
             
               export ANSIBLE_HOST_KEY_CHECKING=False
               
-              #ansible-playbook -vv /tmp/jenkins/replace_import.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY --extra-vars Application_Name=$Application_Name --extra-vars Source_Environment=$Source_Environment --extra-vars FilePath_Name=$Export_File_Name --extra-vars Control_File=$Import_Control_File --extra-vars Target_Environment=$Target_Environment
-              #ansible-playbook -vv /tmp/jenkins/import_infa.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY
+              #ansible-playbook -vv /tmp/jenkins/replace_import.yaml --extra-vars ansible_user=pratik --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY --extra-vars Application_Name=$Application_Name --extra-vars Source_Environment=$Source_Environment --extra-vars FilePath_Name=$Export_File_Name --extra-vars Control_File=$Import_Control_File --extra-vars Target_Environment=$Target_Environment
+              #ansible-playbook -vv /tmp/jenkins/import_infa.yaml --extra-vars ansible_user=pratik --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY
               """
             }
           }
@@ -94,8 +94,8 @@ pipeline {
             
               export ANSIBLE_HOST_KEY_CHECKING=False
               
-              #ansible-playbook -vv /tmp/jenkins/replace_import.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY --extra-vars Application_Name=$Application_Name --extra-vars Source_Environment=$Source_Environment --extra-vars FilePath_Name=$Export_File_Name --extra-vars Control_File=$Import_Control_File --extra-vars Target_Environment=$Target_Environment
-              #ansible-playbook -vv /tmp/jenkins/import_infa.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY
+              #ansible-playbook -vv /tmp/jenkins/replace_import.yaml --extra-vars ansible_user=pratik --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY --extra-vars Application_Name=$Application_Name --extra-vars Source_Environment=$Source_Environment --extra-vars FilePath_Name=$Export_File_Name --extra-vars Control_File=$Import_Control_File --extra-vars Target_Environment=$Target_Environment
+              #ansible-playbook -vv /tmp/jenkins/import_infa.yaml --extra-vars ansible_user=pratik --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY
               """
             }
           }
@@ -125,8 +125,8 @@ pipeline {
             
               export ANSIBLE_HOST_KEY_CHECKING=False
               
-              #ansible-playbook -vv /tmp/jenkins/replace_application.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY --extra-vars Application_Name=$Application_Name --extra-vars Project_Name=$Project_Name --extra-vars Integration_Service=$Integration_Service --extra-vars Target_Environment=$Target_Environment
-              #ansible-playbook -vv /tmp/jenkins/create_war_app.yaml --extra-vars ansible_user=informatica --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY
+              #ansible-playbook -vv /tmp/jenkins/replace_application.yaml --extra-vars ansible_user=pratik --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY --extra-vars Application_Name=$Application_Name --extra-vars Project_Name=$Project_Name --extra-vars Integration_Service=$Integration_Service --extra-vars Target_Environment=$Target_Environment
+              #ansible-playbook -vv /tmp/jenkins/create_war_app.yaml --extra-vars ansible_user=pratik --extra-vars ansible_ssh_private_key_file=$ANSIBLE_KEY
               """
             }
           }
